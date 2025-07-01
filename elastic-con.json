@@ -1,0 +1,6 @@
+{
+  "url": "https://localhost:9200",
+  "path_cert_validation": "/home/andrei/pki/http.crt",
+  "login": "elastic",
+  "pass": "rILpAx=E8ZDhA7S5OF3+"
+}

@@ -1,0 +1,25 @@
+[package]
+name = "hyperion-eosio-rust"
+version = "0.1.0"
+edition = "2024"
+resolver = "3"
+
+[dependencies]
+tokio = { version = "1.0.0", features = ["full"] }
+tokio-tungstenite = "0.27.0"
+serde_json = "1.0.140"
+sys-info="0.8.0"
+eosio-shipper-gf = "0.1.2"
+futures-util = "0.3"
+url = "2.5"
+libabieos-sys = { version = "0.3.7"} #, path="../eosio/libabieos-sys" }
+rs_abieos = { version = "0.1.5", path="../rs-abieos" }
+error-chain = "0.12"
+antelope-client = "0.2.0"
+byteorder = "1.5.0"
+serde = { version = "1.0.219", features = ["derive"] }
+hex = "0.4.3"
+reqwest = { version = "0.12", features = ["rustls-tls"] }
+
+elasticsearch = { version = "9.0.0-alpha.1", default-features = false, features = ["rustls-tls","native-tls"] }
+log = "0.4.27"
