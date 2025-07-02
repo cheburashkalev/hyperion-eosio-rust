@@ -2,20 +2,19 @@
   "policy": {
     "phases": {
       "hot": {
-        "min_age": "0ms",
         "actions": {
           "rollover": {
-            "max_size": "200gb",
             "max_age": "60d",
-            "max_docs": 100000000
+            "max_docs": 100000000,
+            "max_size": "200gb"
           },
           "set_priority": {
             "priority": 50
           }
-        }
+        },
+        "min_age": "0ms"
       },
       "warm": {
-        "min_age": "2d",
         "actions": {
           "allocate": {
             "exclude": {
@@ -25,7 +24,8 @@
           "set_priority": {
             "priority": 25
           }
-        }
+        },
+        "min_age": "2d"
       }
     }
   }

@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AIAssistantCustomInstructionsStorage">
+    <option name="instructions">
+      <map>
+        <entry key="AIAssistant.General.ProjectPrompt">
+          <value>
+            <AIAssistantStoredInstruction>
+              <option name="actionId" value="AIAssistant.General.ProjectPrompt" />
+              <option name="content" value="отвечай по русски" />
+            </AIAssistantStoredInstruction>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
+  <component name="CargoProjects">
+    <cargoProject FILE="$PROJECT_DIR$/Cargo.toml">
+      <package file="$PROJECT_DIR$">
+        <enabledFeature name="default" />
+        <enabledFeature name="rustls-tls" />
+      </package>
+    </cargoProject>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3e97b905-9a3d-41d2-af77-b39881101931" name="Changes" comment="elastic + ship + abi working">
+      <change afterPath="$PROJECT_DIR$/src/configs/abi.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/configs/ilm_policy.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/configs/ship.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/index/definitions/elastic_abi_doc.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/index/definitions/get_blocks_request.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/index/definitions/get_status_request.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/index/definitions/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/index/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/abi.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/elastic-con.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/elastic-policy.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/configs/elastic_con.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/configs/elastic_con.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/configs/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/configs/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/definitions/mod.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/elastic_hyperion/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/elastic_hyperion/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="RsBuildProfile:dev" />
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Rust File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;cheburashkalev&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/cheburashkalev/hyperion-eosio-rust.git&quot;,
+    &quot;accountId&quot;: &quot;60c4fb87-3d9e-4f0d-ab51-6e86a27ec76c&quot;
+  }
+}</component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="76NNS4IT" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="2yUimCjfX8UOC1cBilRCoRFEWE6" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Cargo.Run axum-api.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Run hyperion-eosio-rust.executor&quot;: &quot;Debug&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.rust.reset.selective.auto.import&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/andrei/hyperion-eosio-rust&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
+    &quot;org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon&quot;: &quot;&quot;,
+    &quot;org.rust.disableDetachedFileInspection/home/andrei/hyperion-eosio-rust/src/configs/elastic_con.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspection/home/andrei/hyperion-eosio-rust/src/elastic_client/mod.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.first.attach.projects&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;language.rust.cargo.check&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RdControllerToolWindowsLayoutState" isNewUi="true">
+    <layout>
+      <window_info id="Bookmarks" side_tool="true" />
+      <window_info id="Merge Requests" />
+      <window_info id="Backup and Sync History" />
+      <window_info id="Commit_Guest" show_stripe_button="false" />
+      <window_info id="Pull Requests" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1841797" />
+      <window_info id="Commit" order="1" weight="0.1841797" />
+      <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Database Changes" />
+      <window_info anchor="bottom" id="TypeScript" />
+      <window_info anchor="bottom" id="File Transfer" />
+      <window_info anchor="bottom" id="Version Control" order="0" weight="0.30377907" />
+      <window_info anchor="bottom" id="Problems" order="1" />
+      <window_info anchor="bottom" id="Problems View" order="2" weight="0.314438" />
+      <window_info anchor="bottom" id="Terminal" order="3" weight="0.30959302" />
+      <window_info anchor="bottom" id="Services" order="4" weight="0.32977644" />
+      <window_info anchor="bottom" id="Build" order="5" weight="0.30959302" />
+      <window_info active="true" anchor="bottom" id="Debug" order="6" visible="true" weight="0.30959302" />
+      <window_info active="true" anchor="bottom" id="Run" order="7" visible="true" weight="0.29602712" />
+      <window_info anchor="bottom" id="TODO" order="8" weight="0.32977644" />
+      <window_info anchor="bottom" id="Find" order="9" weight="0.32977644" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.314438" />
+      <window_info anchor="right" id="PR AI Assistant" />
+      <window_info anchor="right" content_ui="combo" id="Notifications" order="0" weight="0.25" />
+      <window_info anchor="right" id="AIAssistant" order="1" sideWeight="0.5007837" weight="0.28652346" />
+      <window_info anchor="right" id="Database" order="2" weight="0.25036126" />
+      <window_info anchor="right" id="Gradle" order="3" weight="0.25" />
+      <window_info anchor="right" id="Maven" order="4" weight="0.25" />
+      <window_info anchor="right" id="Cargo" order="5" weight="0.2" />
+      <window_info active="true" anchor="right" id="RustCargo" order="6" sideWeight="0.5007837" visible="true" weight="0.14199218" />
+      <window_info anchor="right" id="Coverage" order="7" sideWeight="0.49921632" side_tool="true" weight="0.28652346" />
+      <window_info anchor="right" id="documentation.v2" order="8" sideWeight="0.49915254" side_tool="true" weight="0.20285216" />
+    </layout>
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/target/debug" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\duxan\RustroverProjects\hyperion-eosio-rust" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Cargo.Run hyperion-eosio-rust">
+    <configuration name="Run hyperion-eosio-rust" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="command" value="run --package hyperion-eosio-rust --bin hyperion-eosio-rust" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <option name="emulateTerminal" value="true" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test hyperion-eosio-rust" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
+      <option name="buildProfileId" value="dev" />
+      <option name="command" value="test --workspace" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <option name="emulateTerminal" value="true" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Cargo.Test hyperion-eosio-rust" />
+      <item itemvalue="Cargo.Run hyperion-eosio-rust" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Cargo.Run hyperion-eosio-rust" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="RustProjectSettings">
+    <option name="toolchainHomeDirectory" value="$PROJECT_DIR$/../.cargo/bin" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3e97b905-9a3d-41d2-af77-b39881101931" name="Changes" comment="" />
+      <created>1749895709641</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1749895709641</updated>
+      <workItem from="1749895710675" duration="2997000" />
+      <workItem from="1749899644634" duration="2218000" />
+      <workItem from="1749902277566" duration="2676000" />
+      <workItem from="1749905006873" duration="4661000" />
+      <workItem from="1749985473353" duration="17225000" />
+      <workItem from="1750088318760" duration="16016000" />
+      <workItem from="1750270730439" duration="651000" />
+      <workItem from="1750272026167" duration="5000" />
+      <workItem from="1750442640721" duration="333000" />
+      <workItem from="1750442976894" duration="1777000" />
+      <workItem from="1750449668813" duration="1230000" />
+      <workItem from="1750592821702" duration="793000" />
+      <workItem from="1750673904810" duration="12180000" />
+      <workItem from="1750837626476" duration="16632000" />
+      <workItem from="1751016374589" duration="14184000" />
+      <workItem from="1751280174708" duration="39302000" />
+      <workItem from="1751444238341" duration="392000" />
+      <workItem from="1751444628990" duration="18007000" />
+    </task>
+    <task id="LOCAL-00001" summary="elastic + ship + abi working">
+      <option name="closed" value="true" />
+      <created>1751400683283</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1751400683283</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="elastic + ship + abi working" />
+    <option name="LAST_COMMIT_MESSAGE" value="elastic + ship + abi working" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/../.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/reqwest-0.12.20/src/tls.rs</url>
+          <line>395</line>
+          <option name="timeStamp" value="74" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="CargoCommandRunConfiguration">
+        <watch expression="text.to_string()" language="Rust" />
+        <watch expression="String::from_utf8(data[0].to_vec())" language="Rust" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
