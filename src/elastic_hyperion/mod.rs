@@ -1,4 +1,5 @@
 use std::error::Error;
+use std::sync::OnceLock;
 use elasticsearch::{Elasticsearch, IndexParts};
 use elasticsearch::auth::Credentials::Basic;
 use elasticsearch::cert::{Certificate, CertificateValidation};
@@ -8,20 +9,24 @@ use tokio::fs::File;
 use tokio::io::AsyncReadExt;
 use crate::{configs};
 use crate::configs::elastic_con;
-pub async fn create_elastic_client() -> Result<Elasticsearch, Box<dyn Error>> 
+use crate::configs::ship::ShipConConfig;
+
+static SHIP_CON_CONFIG: OnceLock<Elasticsearch> = OnceLock::new();
+pub async fn get_elastic_client() -> Result<&'static Elasticsearch, Box<dyn Error>>
 {
     let config = elastic_con::get_elastic_con_config();
-    let conn_pool = SingleNodeConnectionPool::new(config.url.parse()?);
-    let mut http_crt_file = File::open(config.path_cert_validation.as_str()).await?;
+    let mut http_crt_file = File::open(config.path_cert_validation.as_str()).await.unwrap();
     let mut http_buf = Vec::new();
     http_crt_file.read_to_end(&mut http_buf).await?;
-    let http_cert = Certificate::from_pem(http_buf.as_slice()).unwrap();
-    let transport = TransportBuilder::new(conn_pool)
-        .auth(Basic(config.login.clone(),config.pass.clone()))
-        .cert_validation(CertificateValidation::Certificate(http_cert))
-        .build()?;
-    let client = Elasticsearch::new(transport);
-    
+    let client = SHIP_CON_CONFIG.get_or_init(|| {
+        let conn_pool = SingleNodeConnectionPool::new(config.url.parse().unwrap());
+        let http_cert = Certificate::from_pem(http_buf.as_slice()).unwrap();
+        let transport = TransportBuilder::new(conn_pool)
+            .auth(Basic(config.login.clone(), config.pass.clone()))
+            .cert_validation(CertificateValidation::Certificate(http_cert))
+            .build().unwrap();
+        Elasticsearch::new(transport)
+    });
     client
         .ilm()
         .put_lifecycle(IlmPutLifecycleParts::Policy("hyperion-rollover"))

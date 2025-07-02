@@ -9,13 +9,14 @@ use tokio::sync::mpsc;
 use tokio_tungstenite::connect_async;
 use tokio_tungstenite::tungstenite::{Bytes, Message};
 pub mod definitions;
+mod index_abi;
 
 use crate::{configs, elastic_hyperion};
 use crate::index::definitions::elastic_abi_doc::AbiDocument;
 use crate::index::definitions::get_blocks_request::GetBlocksRequestV0;
 use crate::index::definitions::get_status_request::{BinaryMarshaler, GetStatusRequestV0};
 pub async fn start_index_block_result_v0() -> Result<(), Box<dyn Error>> {
-    
+
     println!("Init Indexing");
     // Prepare configs
     println!("Init configs");
@@ -24,7 +25,7 @@ pub async fn start_index_block_result_v0() -> Result<(), Box<dyn Error>> {
 
     // Init client elastic search
     println!("Init client elastic search");
-    let client = elastic_hyperion::create_elastic_client().await?;
+    let client = elastic_hyperion::get_elastic_client().await?;
 
     println!("Init SHIP connection");
     let ws_stream = connect_async(ship_config.url.clone()).await?.0;
@@ -76,12 +77,7 @@ pub async fn start_index_block_result_v0() -> Result<(), Box<dyn Error>> {
                                 };
                                 let head_block = BlockResult.head;
                                 let head_block_num = head_block.block_num;
-                                if BlockResult.transactions.len() > 1 {
-                                    println!("BlockResult received - Head: {}, This Block: {}, Transactions: {}, Traces: {}, Deltas: {}", head_block_num, this_block.block_num, BlockResult.transactions.len(), BlockResult.traces.len(), BlockResult.deltas.len());
-                                }
-                                if this_block.block_num == 51000 {
-                                    println!("BlockResult received - Head: {}, This Block: {}, Transactions: {}, Traces: {}, Deltas: {}", head_block_num, this_block.block_num, BlockResult.transactions.len(), BlockResult.traces.len(), BlockResult.deltas.len());
-                                }
+                                println!("BlockResult received - Head: {}, This Block: {}, Transactions: {}, Traces: {}, Deltas: {}", head_block_num, this_block.block_num, BlockResult.transactions.len(), BlockResult.traces.len(), BlockResult.deltas.len());
                                 for delta in BlockResult.deltas {
                                     if delta.name == "account"{
                                         for row in delta.rows {
@@ -94,7 +90,7 @@ pub async fn start_index_block_result_v0() -> Result<(), Box<dyn Error>> {
 
                                                                 let abi_ABIEOS: ABIEOS = ABIEOS::new_with_abi("eosio", &abi_config)?;
                                                                 let parsed_abi = abi_ABIEOS.hex_to_json("eosio", "abi_def", acc.abi.as_bytes())?;
-                                                                
+
                                                                 let abi_json: Value = serde_json::from_str(parsed_abi.as_str()).unwrap();
                                                                 let mut actions: Vec<String> = Vec::new();
                                                                 abi_json["actions"].as_array().unwrap().iter().for_each(|action| {
