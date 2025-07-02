@@ -85,41 +85,7 @@ pub async fn start_index_block_result_v0() -> Result<(), Box<dyn Error>> {
                                                 TableRowTypes::account(acc) => {
                                                     match acc {
                                                         Account::account_v0(acc) => {
-                                                            if acc.abi != "" {
-
-
-                                                                let abi_ABIEOS: ABIEOS = ABIEOS::new_with_abi("eosio", &abi_config)?;
-                                                                let parsed_abi = abi_ABIEOS.hex_to_json("eosio", "abi_def", acc.abi.as_bytes())?;
-
-                                                                let abi_json: Value = serde_json::from_str(parsed_abi.as_str()).unwrap();
-                                                                let mut actions: Vec<String> = Vec::new();
-                                                                abi_json["actions"].as_array().unwrap().iter().for_each(|action| {
-                                                                    actions.push( action["name"].as_str().unwrap().to_string());
-                                                                });
-                                                                let mut tables: Vec<String> = Vec::new();;
-                                                                abi_json["tables"].as_array().unwrap().iter().for_each(|table| {
-                                                                    tables.push( table["name"].as_str().unwrap().to_string());
-                                                                });
-
-                                                                let abi_doc = AbiDocument {
-                                                                    timestamp: block_ts.to_string(), // Конвертация в формат ISO 8601
-                                                                    account: acc.name.to_string(),
-                                                                    block: this_block.block_num,
-                                                                    abi: parsed_abi,
-                                                                    abi_hex: acc.abi,
-                                                                    actions: actions.clone(),
-                                                                    tables: tables.clone(),
-                                                                };
-
-                                                                //// Отправка в Elasticsearch
-                                                                // Настроенный клиент
-                                                                let response = client
-                                                                    .index(IndexParts::IndexId("gf-abi", "1"))
-                                                                    .body(json!(abi_doc))
-                                                                    .send()
-                                                                    .await?;
-                                                                println!("Response elastic: {:?}", response);
-                                                            }
+                                                            index_abi::parse_new_abi(acc, block_ts.to_string(), this_block.block_num).await;
                                                         }
                                                     }
                                                 },
