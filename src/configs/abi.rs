@@ -204,44 +204,11 @@ fn get_def_abi_json() -> Value {
 }
 static ABI_CONFIG: OnceLock<String> = OnceLock::new();
 const FILE_NAME_ABI_JSON: &str = "abi.json";
-fn get_path_abi_json() -> String {
-    let folder = configs::get_part_path_to_configs();
-    let file_path = format!("{}{}",folder,FILE_NAME_ABI_JSON);
-    file_path
-}
-fn create_file_abi_json(config: &Value){
-    let json = serde_json::to_string_pretty(config).unwrap();
-    let folder = configs::get_part_path_to_configs();
-    fs::create_dir_all(folder).unwrap();
-    let mut file = fs::File::create(get_path_abi_json()).unwrap();
-    file.write_all(json.as_bytes()).unwrap();
-}
-pub fn get_abi_config() -> &'static String {
-    let file_path = &get_path_abi_json();
-    let config = get_def_abi_json();
-    ABI_CONFIG.get_or_init(|| {
-        println!("Start load ABI_CONFIG file PATH: {}.",file_path);
-        let file = fs::read_to_string(file_path);
-        match file {
-            Ok(text) => {
-                let config_raw = serde_json::from_str::<Value>(&text);
-                match config_raw {
-                    Ok(config) => {
-                        serde_json::to_string_pretty(&config).unwrap()
-                    },
-                    Err(e) => {
-                        warn!("Error load file PATH: {}. Start Init from struct get_def_abi_json(). FROM RUST LANG: {}.",file_path,e);
-                        create_file_abi_json(&config);
-                        serde_json::to_string_pretty(&config).unwrap()
-                    }
-                }
-            },
-            Err(e)=>{
-                warn!("Error load file PATH: {}. Start Init from struct get_def_abi_json(). FROM RUST LANG: {}.",file_path,e);
-                create_file_abi_json(&config);
-                serde_json::to_string_pretty(&config).unwrap()
-            }
-        }
 
+pub fn get_abi_config() -> &'static String {
+    ABI_CONFIG.get_or_init(|| {
+        println!("Start loading \'ABI_CONFIG\' file: {}.",FILE_NAME_ABI_JSON);
+        let config = configs::load_configs_json(FILE_NAME_ABI_JSON,get_def_abi_json());
+        config.to_string()
     })
 }

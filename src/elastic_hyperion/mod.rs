@@ -5,10 +5,11 @@ use elasticsearch::auth::Credentials::Basic;
 use elasticsearch::cert::{Certificate, CertificateValidation};
 use elasticsearch::http::transport::{SingleNodeConnectionPool, TransportBuilder};
 use elasticsearch::ilm::IlmPutLifecycleParts;
+use elasticsearch::indices::IndicesPutTemplateParts;
 use tokio::fs::File;
 use tokio::io::AsyncReadExt;
 use crate::{configs};
-use crate::configs::elastic_con;
+use crate::configs::{elastic_con, templates};
 use crate::configs::ship::ShipConConfig;
 
 static SHIP_CON_CONFIG: OnceLock<Elasticsearch> = OnceLock::new();
@@ -31,6 +32,12 @@ pub async fn get_elastic_client() -> Result<&'static Elasticsearch, Box<dyn Erro
         .ilm()
         .put_lifecycle(IlmPutLifecycleParts::Policy("hyperion-rollover"))
         .body(configs::ilm_policy::get_ilm_policy_config())
+        .send()
+        .await?;
+    client
+        .indices()
+        .put_template(IndicesPutTemplateParts::Name("gf-abi"))
+        .body(templates::abi())
         .send()
         .await?;
     Ok(client)

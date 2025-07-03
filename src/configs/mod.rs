@@ -2,13 +2,17 @@ pub mod elastic_con;
 pub mod abi;
 pub mod ilm_policy;
 pub mod ship;
+pub mod templates;
+pub mod index;
 
+use std::error::Error;
 use std::fs;
 use std::io::{Read, Write};
+use std::path::Path;
 use std::sync::OnceLock;
 use serde_json::{json, Value};
 use log::{log, warn};
-use serde::{Deserialize, Serialize};
+use serde::{de, Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Debug)]
 struct Loading {
@@ -78,4 +82,52 @@ pub fn get_part_path_to_configs() -> String{
 }
 fn get_load_configs_from_etc() -> bool {
     get_loading_config().load_configs_from_etc
+}
+pub fn save_json<T>(config: &T,path: &Path)
+where
+    T: ?Sized + Serialize,
+{
+    let json = serde_json::to_string_pretty(config).unwrap();
+    fs::create_dir_all(path.parent().unwrap()).unwrap();
+    let mut file = fs::File::create(path).unwrap();
+    file.write_all(json.as_bytes()).unwrap();
+}
+pub fn save_configs_json<T>(config: &T,file_name: &str)
+where
+    T: ?Sized + Serialize,
+{
+    save_json(config,&Path::new(format!("{}{}",get_part_path_to_configs(),file_name).as_str()));
+}
+pub fn load_configs_json<T>(file_name: &str,def:T) -> T
+where
+    T: for<'de> Deserialize<'de> + Default + Serialize,
+{
+    let file = fs::read_to_string(file_name);
+    match file {
+        Ok(text) => {
+            read_config(&text, file_name,def).unwrap()
+        },
+        Err(e)=>{
+            warn!("Error load file PATH: {}. Start Init from struct T::default(). FROM RUST LANG: {}.",file_name,e);
+            save_configs_json(&def,file_name);
+            def
+        }
+    }
+    
+}
+fn read_config<'a, T>(text: &'a str,file_path: &str,def:T) -> serde_json::Result<T>
+where 
+    T: de::Deserialize<'a> + Default + ?Sized +Serialize,
+{
+    let config_raw = serde_json::from_str::<T>(text);
+    match config_raw {
+        Ok(config) => {
+            Ok(config)
+        },
+        Err(e) => {
+            warn!("Error load file PATH: {}. Start Init from struct T::default(). FROM RUST LANG: {}.",file_path,e);
+            save_configs_json(&def,file_path);
+            Ok(def)
+        }
+    }
 }

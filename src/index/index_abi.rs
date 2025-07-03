@@ -36,7 +36,7 @@ pub async fn parse_new_abi(acc: AccountV0,block_ts:String,block_num: u32) {
         // Настроенный клиент
         
         let response = elastic_hyperion::get_elastic_client().await.unwrap()
-            .index(IndexParts::IndexId("gf-abi", "1"))
+            .index(IndexParts::IndexId("gf-abi", block_num.to_string().as_str()))
             .body(json!(abi_doc))
             .send()
             .await.unwrap();
