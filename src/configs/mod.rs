@@ -102,7 +102,7 @@ pub fn load_configs_json<T>(file_name: &str,def:T) -> T
 where
     T: for<'de> Deserialize<'de> + Default + Serialize,
 {
-    let file = fs::read_to_string(file_name);
+    let file = fs::read_to_string(format!("{}{}",get_part_path_to_configs(),file_name));
     match file {
         Ok(text) => {
             read_config(&text, file_name,def).unwrap()
