@@ -1,0 +1,79 @@
+[
+  {
+    "body": {
+      "policy": {
+        "phases": {
+          "hot": {
+            "actions": {
+              "rollover": {
+                "max_age": "60d",
+                "max_docs": 100000000,
+                "max_size": "200gb"
+              },
+              "set_priority": {
+                "priority": 50
+              }
+            },
+            "min_age": "0ms"
+          },
+          "warm": {
+            "actions": {
+              "allocate": {
+                "exclude": {
+                  "data": "hot"
+                }
+              },
+              "set_priority": {
+                "priority": 25
+              }
+            },
+            "min_age": "2d"
+          }
+        }
+      }
+    },
+    "policy": "hyperion-rollover"
+  },
+  {
+    "body": {
+      "policy": {
+        "phases": {
+          "hot": {
+            "actions": {
+              "rollover": {
+                "max_age": "30d",
+                "max_docs": 100000000,
+                "max_size": "10gb"
+              },
+              "set_priority": {
+                "priority": 100
+              }
+            },
+            "min_age": "0ms"
+          }
+        }
+      }
+    },
+    "policy": "10G30D"
+  },
+  {
+    "body": {
+      "policy": {
+        "phases": {
+          "hot": {
+            "actions": {
+              "rollover": {
+                "max_size": "200gb"
+              },
+              "set_priority": {
+                "priority": 100
+              }
+            },
+            "min_age": "0ms"
+          }
+        }
+      }
+    },
+    "policy": "200G"
+  }
+]

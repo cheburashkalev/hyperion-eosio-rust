@@ -91,6 +91,9 @@ pub async fn start_index_block_result_v0() -> Result<(), Box<dyn Error>> {
                                 index_block::parse_new_block(semaphore.clone(),block, block_ts, this_block).await;
                                 let head_block = BlockResult.head;
                                 let head_block_num = head_block.block_num;
+                                if BlockResult.transactions.len() > 0 {
+                                    println!("Transactions received");
+                                }
                                 draw_progress_bar(this_block.block_num, head_block_num).await;
                                 //println!("BlockResult received - Head: {}, This Block: {}, Transactions: {}, Traces: {}, Deltas: {}", head_block_num, this_block.block_num, BlockResult.transactions.len(), BlockResult.traces.len(), BlockResult.deltas.len());
                                 for delta in BlockResult.deltas {

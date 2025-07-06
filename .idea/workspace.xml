@@ -26,21 +26,11 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3e97b905-9a3d-41d2-af77-b39881101931" name="Changes" comment="refactoring">
-      <change afterPath="$PROJECT_DIR$/src/index/index_block.rs" afterDir="false" />
+    <list default="true" id="3e97b905-9a3d-41d2-af77-b39881101931" name="Changes" comment="speed up!">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/configs/elastic_ilm_policy.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/configs/ilm_policy.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/configs/ilm_policy.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/configs/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/configs/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/configs/templates.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/configs/templates.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/elastic_hyperion/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/elastic_hyperion/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index/definitions/elastic_abi_doc.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/definitions/elastic_docs.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index/definitions/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/definitions/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index/index_abi.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/index_abi.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index/definitions/elastic_docs.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/definitions/elastic_docs.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index/index_action.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/index_action.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,6 +62,9 @@
 }</component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="76NNS4IT" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
@@ -115,26 +108,26 @@
       <window_info id="Backup and Sync History" />
       <window_info id="Commit_Guest" show_stripe_button="false" />
       <window_info id="Pull Requests" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19902344" />
-      <window_info id="Commit" order="1" weight="0.199491" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21991247" />
+      <window_info id="Commit" order="1" weight="0.19902344" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Database Changes" />
       <window_info anchor="bottom" id="TypeScript" />
       <window_info anchor="bottom" id="File Transfer" />
       <window_info anchor="bottom" id="Version Control" order="0" weight="0.3302619" />
       <window_info anchor="bottom" id="Problems" order="1" />
-      <window_info anchor="bottom" id="Problems View" order="2" weight="0.32897288" />
+      <window_info active="true" anchor="bottom" id="Problems View" order="2" visible="true" weight="0.32929194" />
       <window_info anchor="bottom" id="Terminal" order="3" weight="0.32897288" />
       <window_info anchor="bottom" id="Services" order="4" weight="0.32977644" />
       <window_info anchor="bottom" id="Build" order="5" weight="0.32897288" />
-      <window_info active="true" anchor="bottom" id="Debug" order="6" visible="true" weight="0.32897288" />
+      <window_info anchor="bottom" id="Debug" order="6" weight="0.32929194" />
       <window_info anchor="bottom" id="Run" order="7" weight="0.32897288" />
       <window_info anchor="bottom" id="TODO" order="8" weight="0.32977644" />
       <window_info anchor="bottom" id="Find" order="9" weight="0.32897288" />
       <window_info anchor="bottom" id="Messages" order="10" weight="0.314438" />
       <window_info anchor="right" id="PR AI Assistant" />
       <window_info anchor="right" id="Notifications" order="0" weight="0.3298828" />
-      <window_info active="true" anchor="right" id="AIAssistant" order="1" sideWeight="0.5007837" visible="true" weight="0.3298828" />
+      <window_info anchor="right" id="AIAssistant" order="1" sideWeight="0.5007837" weight="0.5700313" />
       <window_info anchor="right" id="Database" order="2" weight="0.25036126" />
       <window_info anchor="right" id="Gradle" order="3" weight="0.25" />
       <window_info anchor="right" id="Maven" order="4" weight="0.25" />
@@ -254,7 +247,7 @@
       <workItem from="1751444628990" duration="46616000" />
       <workItem from="1751626756958" duration="672000" />
       <workItem from="1751628720535" duration="2275000" />
-      <workItem from="1751631242364" duration="29490000" />
+      <workItem from="1751631242364" duration="55245000" />
     </task>
     <task id="LOCAL-00001" summary="elastic + ship + abi working">
       <option name="closed" value="true" />
@@ -296,7 +289,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751556347255</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="speed up!">
+      <option name="closed" value="true" />
+      <created>1751727004073</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1751727004073</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -316,7 +317,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="elastic + ship + abi working" />
     <MESSAGE value="refactoring" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactoring" />
+    <MESSAGE value="speed up!" />
+    <option name="LAST_COMMIT_MESSAGE" value="speed up!" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -325,6 +327,11 @@
           <url>file://$PROJECT_DIR$/../.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/reqwest-0.12.20/src/tls.rs</url>
           <line>395</line>
           <option name="timeStamp" value="74" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/index/mod.rs</url>
+          <line>94</line>
+          <option name="timeStamp" value="89" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
