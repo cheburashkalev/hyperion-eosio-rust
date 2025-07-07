@@ -14,7 +14,6 @@ eosio-shipper-gf = "0.1.2"
 futures-util = "0.3"
 url = "2.5"
 libabieos-sys = { version = "0.3.7"} #, path="../eosio/libabieos-sys" }
-rs_abieos = { version = "0.1.5", path="../rs-abieos" }
 error-chain = "0.12"
 antelope-client = "0.2.0"
 byteorder = "1.5.0"

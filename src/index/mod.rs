@@ -59,7 +59,7 @@ pub async fn start_index_block_result_v0() -> Result<(), Box<dyn Error>> {
         match message {
             Ok(Message::Text(text)) => {
                 msg_texts = text;
-                println!("NEW SHIPPER_ABI has been received");
+                println!("NEW SHIPPER_ABI has been received \n {:?}",msg_texts);
 
                 let status_request = GetStatusRequestV0::new();
                 let request_bytes = status_request.marshal_binary()?;
@@ -91,9 +91,7 @@ pub async fn start_index_block_result_v0() -> Result<(), Box<dyn Error>> {
                                 index_block::parse_new_block(semaphore.clone(),block, block_ts, this_block).await;
                                 let head_block = BlockResult.head;
                                 let head_block_num = head_block.block_num;
-                                if BlockResult.transactions.len() > 0 {
-                                    println!("Transactions received");
-                                }
+
                                 draw_progress_bar(this_block.block_num, head_block_num).await;
                                 //println!("BlockResult received - Head: {}, This Block: {}, Transactions: {}, Traces: {}, Deltas: {}", head_block_num, this_block.block_num, BlockResult.transactions.len(), BlockResult.traces.len(), BlockResult.deltas.len());
                                 for delta in BlockResult.deltas {
@@ -115,6 +113,18 @@ pub async fn start_index_block_result_v0() -> Result<(), Box<dyn Error>> {
                                             }
                                         }
                                     }
+                                }
+                                if BlockResult.transactions.len() > 0 {
+                                    let header = match block{
+                                        SignedBlock::signed_block_v0(b)=>{
+                                            &b.signed_header.header
+                                        },
+                                        SignedBlock::signed_block_v1(b)=>{
+                                            &b.signed_header.header
+                                        }
+                                    };
+                                    index_action::parse_new_action(semaphore.clone(),header,BlockResult.traces,block_ts,this_block).await;
+                                    //println!("Transactions received");
                                 }
                                 if this_block.block_num % 10000 == 0 {
                                     next_block = this_block.block_num + 1;

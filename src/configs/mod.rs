@@ -4,6 +4,7 @@ pub mod ilm_policy;
 pub mod ship;
 pub mod templates;
 pub mod index;
+pub mod abi_eosio;
 
 use std::error::Error;
 use std::fs;

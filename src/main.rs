@@ -12,7 +12,7 @@ macro_rules! measure_time {
     ($name:expr, $code:block) => {
         let start = Instant::now();
         $code
-        let duration = start.elapsed();
+        let _duration = start.elapsed();
         //println!("{}: {:?}", $name, duration);
     };
 }
