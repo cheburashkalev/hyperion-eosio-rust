@@ -4,11 +4,7 @@ use crate::index::definitions::elastic_docs::{
 use crate::{configs, elastic_hyperion, measure_time};
 use elasticsearch::{IndexParts, SearchParts};
 use eosio_shipper_gf::EOSIO_SYSTEM;
-use eosio_shipper_gf::shipper_types::{
-    AccountAuthSequence, ActionReceiptVariant, ActionTraceVariant, BlockHeader, BlockPosition,
-    PartialTransactionVariant, ProducerKey, ProducerSchedule, PrunableData, SignedBlock, Traces,
-    Transaction, TransactionReceiptV0, TransactionTraceV0,
-};
+use eosio_shipper_gf::shipper_types::{AccountAuthSequence, AccountDelta, ActionReceiptVariant, ActionTraceVariant, BlockHeader, BlockPosition, PartialTransactionVariant, ProducerKey, ProducerSchedule, PrunableData, SignedBlock, Traces, Transaction, TransactionReceiptV0, TransactionTraceV0};
 use futures_util::TryFutureExt;
 use libabieos_sys::ABIEOS;
 use log::{error, trace};
@@ -70,16 +66,14 @@ pub async fn parse_new_action(
                             }
                         }
                     };
-                    if signatures.is_none() {
-                        continue;
-                    }
-                    if signatures.as_ref().unwrap().len() == 0 {
-                        continue;
-                    }
                     let account_ram_delta = t.account_ram_delta.as_ref();
                     let mut account_ram_deltas: Option<Vec<Value>> = None;
                     if account_ram_delta.is_some() {
-                        account_ram_deltas = Some(vec![json!(account_ram_delta.unwrap())]);
+                        let ard = account_ram_delta.unwrap();
+                        account_ram_deltas = Some(vec![json!(AccountDelta{
+                            account: ard.account.clone(),
+                            delta: ard.delta.clone()
+                        })]);
                     }
                     let block_num = this_block.block_num.clone();
                     let block_id = this_block.block_id.clone();
@@ -144,14 +138,18 @@ pub async fn parse_new_action(
                                 abi = parse_json(abi.as_str()).unwrap().to_string();
                                 //abi = abi.replace("\\\"","\"").replace("\\n","").replace("","");
 
-                                let shipper_abi =
-                                    ABIEOS::new_with_abi(&*a.act.account.clone(), abi.as_str())
-                                        .unwrap();
+                                let shipper_abi = ABIEOS::new_with_abi(a.act.account.as_str(), abi.as_str()).unwrap_or_else(|e|{
+                                  panic!("Error create shipper abi: {:?}", e);
+                                });
                                 let hex = a.act.data.as_bytes();
-                                
+                                let hex = hex::decode(a.act.data.as_str()).unwrap();
+                                let hex = hex.as_slice();
                                 let data = shipper_abi
-                                    .hex_to_json(&*a.act.account.clone(), a.act.name.as_str(), hex)
-                                    .unwrap();
+                                    .bin_to_json(a.act.account.as_str(), a.act.name.as_str(), hex)
+                                    .unwrap_or_else(|e|{
+                                        shipper_abi.destroy();
+                                    panic!("Error parse data action: {:?}", e);
+                                });
                                 shipper_abi.destroy();
                                 let data = parse_json(data.as_str()).unwrap();
                                 
@@ -331,7 +329,7 @@ fn start_async(semaphore: Arc<Semaphore>, docs: Vec<ActionDocument>) {
                 .unwrap()
                 .index(IndexParts::IndexId(
                     "gf-action",
-                    block_doc.block_num.to_string().as_str(),
+                    &*block_doc.global_sequence.clone(),
                 ))
                 .body(json!(block_doc))
                 .send()

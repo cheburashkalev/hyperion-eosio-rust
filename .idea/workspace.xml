@@ -27,22 +27,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3e97b905-9a3d-41d2-af77-b39881101931" name="Changes" comment="prepair action index">
-      <change afterPath="$PROJECT_DIR$/configs/base_eosio.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/configs/abi_eosio.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/configs/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/configs/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index/index_action.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/index_action.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="RsBuildProfile:release" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="RsBuildProfile:dev" />
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -83,7 +77,7 @@
   "keyToString": {
     "Cargo.Run axum-api.executor": "Run",
     "Cargo.Run hyperion-eosio-rust.executor": "Run",
-    "Cargo.run.executor": "Run",
+    "Cargo.run.executor": "Debug",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
@@ -113,8 +107,8 @@
       <window_info id="Backup and Sync History" />
       <window_info id="Commit_Guest" show_stripe_button="false" />
       <window_info id="Pull Requests" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.11777344" />
-      <window_info id="Commit" order="1" weight="0.11777344" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.11765858" />
+      <window_info id="Commit" order="1" weight="0.11765858" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Database Changes" />
       <window_info anchor="bottom" id="TypeScript" />
@@ -122,11 +116,11 @@
       <window_info anchor="bottom" id="Version Control" order="0" weight="0.3302619" />
       <window_info anchor="bottom" id="Problems" order="1" />
       <window_info anchor="bottom" id="Problems View" order="2" weight="0.41618216" />
-      <window_info anchor="bottom" id="Terminal" order="3" weight="0.32897288" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="3" visible="true" weight="0.7162949" />
       <window_info anchor="bottom" id="Services" order="4" weight="0.32977644" />
-      <window_info anchor="bottom" id="Build" order="5" weight="0.22432171" />
-      <window_info anchor="bottom" id="Debug" order="6" weight="0.22432171" />
-      <window_info active="true" anchor="bottom" id="Run" order="7" visible="true" weight="0.22432171" />
+      <window_info anchor="bottom" id="Build" order="5" weight="0.3302619" />
+      <window_info anchor="bottom" id="Debug" order="6" weight="0.7162949" />
+      <window_info anchor="bottom" id="Run" order="7" weight="0.3302619" />
       <window_info anchor="bottom" id="TODO" order="8" weight="0.32977644" />
       <window_info anchor="bottom" id="Find" order="9" weight="0.32897288" />
       <window_info anchor="bottom" id="Messages" order="10" weight="0.314438" />
@@ -193,7 +187,7 @@
       </method>
     </configuration>
     <configuration name="run" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="buildProfileId" value="release" />
+      <option name="buildProfileId" value="dev" />
       <option name="command" value="run" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
       <envs>
@@ -255,6 +249,7 @@
       <workItem from="1751626756958" duration="672000" />
       <workItem from="1751628720535" duration="2275000" />
       <workItem from="1751631242364" duration="83909000" />
+      <workItem from="1751911887742" duration="11933000" />
     </task>
     <task id="LOCAL-00001" summary="elastic + ship + abi working">
       <option name="closed" value="true" />
@@ -346,13 +341,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/index/index_action.rs</url>
-          <line>241</line>
-          <option name="timeStamp" value="112" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/index/index_action.rs</url>
-          <line>243</line>
-          <option name="timeStamp" value="113" />
+          <line>147</line>
+          <option name="timeStamp" value="119" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

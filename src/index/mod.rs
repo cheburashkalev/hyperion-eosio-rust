@@ -59,7 +59,7 @@ pub async fn start_index_block_result_v0() -> Result<(), Box<dyn Error>> {
         match message {
             Ok(Message::Text(text)) => {
                 msg_texts = text;
-                println!("NEW SHIPPER_ABI has been received \n {:?}",msg_texts);
+                //println!("NEW SHIPPER_ABI has been received \n {:?}",msg_texts);
 
                 let status_request = GetStatusRequestV0::new();
                 let request_bytes = status_request.marshal_binary()?;
