@@ -4,14 +4,16 @@ use eosio_shipper_gf::shipper_types::{
     Account, GetBlocksResultV0Ex, ShipResultsEx, SignedBlock, TableRowTypes,
 };
 use futures_util::{SinkExt, StreamExt};
-use libabieos_sys::ABIEOS;
 use serde_json::{Value, json};
 use std::error::Error;
 use std::sync::Arc;
 use std::thread;
+use std::time::Duration;
+use rs_abieos::Abieos;
 use tokio::io;
 use tokio::io::AsyncWriteExt;
 use tokio::sync::{mpsc, Semaphore};
+use tokio::time::Instant;
 use tokio_tungstenite::connect_async;
 use tokio_tungstenite::tungstenite::{Bytes, Message, Utf8Bytes};
 pub mod definitions;
@@ -23,7 +25,7 @@ use crate::index::definitions::elastic_docs::AbiDocument;
 use crate::index::definitions::get_blocks_request::GetBlocksRequestV0;
 use crate::index::definitions::get_status_request::{BinaryMarshaler, GetStatusRequestV0};
 use crate::{configs, elastic_hyperion};
-pub async fn start_index_block_result_v0() -> Result<(), Box<dyn Error>> {
+pub async fn start_index_block_result_v0(start_block: u32) -> Result<(), Box<dyn Error>> {
     println!("Init Indexing");
     // Prepare configs
     println!("Init configs");
@@ -49,12 +51,15 @@ pub async fn start_index_block_result_v0() -> Result<(), Box<dyn Error>> {
             }
         }
     });
-    let mut next_block: u32 = 1;
+    let mut next_block: u32 = start_block;
     println!("Init SHIPPER_ABI");
     //let mut shipper_abi: ABIEOS = ABIEOS::new();
     println!("Start listening SHIP messages");
     let mut msg_texts: Utf8Bytes = Utf8Bytes::default();
     let semaphore = Arc::new(Semaphore::new(100));
+    let mut durations = Vec::with_capacity(10000);
+
+
     while let Some(message) = read.next().await {
         match message {
             Ok(Message::Text(text)) => {
@@ -66,9 +71,13 @@ pub async fn start_index_block_result_v0() -> Result<(), Box<dyn Error>> {
                 tx.send(request_bytes)?;
             }
             Ok(Message::Binary(data)) => {
-                let shipper_abi = ABIEOS::new_with_abi(EOSIO_SYSTEM, &msg_texts).unwrap();
+                let start = Instant::now();
+                let shipper_abi = Abieos::new();
+                shipper_abi.set_abi_json(EOSIO_SYSTEM, msg_texts.to_string()).unwrap_or_else(|e|{
+                    shipper_abi.destroy();
+                    panic!("Error create shipper abi: {:?}", e);
+                });
                 //tokio::spawn(async{
-
                 let r = ShipResultsEx::from_bin(&shipper_abi, &data);
                 shipper_abi.destroy();
                 match r {
@@ -91,8 +100,9 @@ pub async fn start_index_block_result_v0() -> Result<(), Box<dyn Error>> {
                                 index_block::parse_new_block(semaphore.clone(),block, block_ts, this_block).await;
                                 let head_block = BlockResult.head;
                                 let head_block_num = head_block.block_num;
-
-                                draw_progress_bar(this_block.block_num, head_block_num).await;
+                                if durations.len() == 10000 {
+                                    draw_progress_bar(this_block.block_num, head_block_num,durations.clone()).await;
+                                }
                                 //println!("BlockResult received - Head: {}, This Block: {}, Transactions: {}, Traces: {}, Deltas: {}", head_block_num, this_block.block_num, BlockResult.transactions.len(), BlockResult.traces.len(), BlockResult.deltas.len());
                                 for delta in BlockResult.deltas {
                                     if delta.name == "account" {
@@ -169,9 +179,14 @@ pub async fn start_index_block_result_v0() -> Result<(), Box<dyn Error>> {
                             }
                         }
                     }
-                    Err(_) => todo!(),
+                    Err(e) => {
+                        panic!("ERROR: {:?}",e);
+                    } ,
                 }
-
+                durations.push(start.elapsed());
+                if durations.len() > 10000 {
+                    durations.remove(0);
+                }
                 //});
 
                 continue;
@@ -192,8 +207,8 @@ pub async fn start_index_block_result_v0() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 pub fn index_block_result_v0(block_res: GetBlocksResultV0Ex) {}
-
-async fn draw_progress_bar(current: u32, max: u32) {
+use std::time::Duration as StdDuration;
+async fn draw_progress_bar(current: u32, max: u32, durations: Vec<Duration>) {
     // Получаем информацию о текущем runtime
     let handle = tokio::runtime::Handle::current();
     let alive_tasks = handle.metrics().num_alive_tasks(); // Количество рабочих потоков
@@ -212,12 +227,16 @@ async fn draw_progress_bar(current: u32, max: u32) {
     let filled = (percent / 100.0 * bar_width as f32).round() as usize;
 
     // Создаём строку прогресс-бара
-    let bar = "=".repeat(filled) + &" ".repeat(bar_width - filled);
 
+    let bar = "=".repeat(filled) + &" ".repeat(bar_width - filled);
+    let total: Duration  = durations.iter().sum();
+    let dur_avg = total / 10000;
+    let dir_min = durations.iter().min().unwrap();
+    let dur_max = durations.iter().max().unwrap();
     // Выводим прогресс-бар с информацией о потоках
     print!(
-        "\r[{}] {:.1}% ({}/{}) | Alive Tasks: {}| Num Workers: {}",
-        bar, percent, current, max, alive_tasks,num_workers
+        "\r[{}] {:.1}% ({}/{}) | Alive Tasks: {} | Num Workers: {} | total: {:?} | agv: {:?} | min: {:?} | max: {:?}",
+        bar, percent, current, max, alive_tasks,num_workers,total,dur_avg,dir_min,dur_max
     );
     io::stdout().flush().await.expect("Failed to flush stdout");
 }

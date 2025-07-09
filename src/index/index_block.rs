@@ -2,7 +2,6 @@ use crate::index::definitions::elastic_docs::{AbiDocument, BlockDocument};
 use crate::{configs, elastic_hyperion, measure_time};
 use elasticsearch::IndexParts;
 use eosio_shipper_gf::shipper_types::{BlockHeader, BlockPosition, ProducerKey, ProducerSchedule, SignedBlock, Transaction, TransactionReceiptV0};
-use libabieos_sys::ABIEOS;
 use log::{error, trace};
 use serde_json::{Value, json};
 use std::fmt::format;

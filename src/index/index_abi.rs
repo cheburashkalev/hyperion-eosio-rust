@@ -2,21 +2,25 @@ use crate::index::definitions::elastic_docs::AbiDocument;
 use crate::{configs, elastic_hyperion, measure_time};
 use elasticsearch::IndexParts;
 use eosio_shipper_gf::shipper_types::AccountV0;
-use libabieos_sys::ABIEOS;
 use log::error;
 use serde_json::{Value, json};
 use std::fmt::format;
 use std::sync::Arc;
 use std::thread;
 use std::time::Instant;
+use rs_abieos::Abieos;
 use tokio::sync::Semaphore;
 
 pub async fn parse_new_abi(semaphore:Arc<Semaphore>, acc: AccountV0, block_ts: String, block_num: u32) {
     if acc.abi != "" {
         let abi_config: &String = configs::abi::get_abi_config();
-        let abi_abieos: ABIEOS = ABIEOS::new_with_abi("eosio", abi_config).unwrap();
+        let abi_abieos = Abieos::new();
+        abi_abieos.set_abi_json("eosio", abi_config.clone()).unwrap_or_else(|e|{
+            abi_abieos.destroy();
+            panic!("Error create shipper abi: {:?}", e);
+        });
         let parsed_abi = abi_abieos
-            .hex_to_json("eosio", "abi_def", acc.abi.as_bytes())
+            .hex_to_json("eosio", "abi_def", acc.abi.clone())
             .unwrap();
         abi_abieos.destroy();
         start_async(semaphore,acc, block_ts, block_num, parsed_abi);

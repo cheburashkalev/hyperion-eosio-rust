@@ -28,15 +28,20 @@
   <component name="ChangeListManager">
     <list default="true" id="3e97b905-9a3d-41d2-af77-b39881101931" name="Changes" comment="prepair action index">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index/index_abi.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/index_abi.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index/index_action.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/index_action.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index/index_block.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/index_block.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="RsBuildProfile:dev" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="RsBuildProfile:release" />
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -45,6 +50,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -77,13 +87,14 @@
   "keyToString": {
     "Cargo.Run axum-api.executor": "Run",
     "Cargo.Run hyperion-eosio-rust.executor": "Run",
-    "Cargo.run.executor": "Debug",
+    "Cargo.Test hyperion-eosio-rust.executor": "Debug",
+    "Cargo.run.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.rust.reset.selective.auto.import": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "AntelopeIO",
     "junie.onboarding.icon.badge.shown": "true",
     "last_opened_file_path": "/home/andrei/hyperion-eosio-rust",
     "node.js.detected.package.eslint": "true",
@@ -96,7 +107,7 @@
     "org.rust.disableDetachedFileInspection/home/andrei/hyperion-eosio-rust/src/configs/elastic_con.rs": "true",
     "org.rust.disableDetachedFileInspection/home/andrei/hyperion-eosio-rust/src/elastic_client/mod.rs": "true",
     "org.rust.first.attach.projects": "true",
-    "settings.editor.selected.configurable": "language.rust.cargo.check",
+    "settings.editor.selected.configurable": "language.rust.build.tool.cargo",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -107,23 +118,23 @@
       <window_info id="Backup and Sync History" />
       <window_info id="Commit_Guest" show_stripe_button="false" />
       <window_info id="Pull Requests" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.11765858" />
-      <window_info id="Commit" order="1" weight="0.11765858" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.123188406" />
+      <window_info id="Commit" order="1" weight="0.123242185" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Database Changes" />
       <window_info anchor="bottom" id="TypeScript" />
       <window_info anchor="bottom" id="File Transfer" />
-      <window_info anchor="bottom" id="Version Control" order="0" weight="0.3302619" />
+      <window_info anchor="bottom" id="Version Control" order="0" weight="0.25557712" />
       <window_info anchor="bottom" id="Problems" order="1" />
-      <window_info anchor="bottom" id="Problems View" order="2" weight="0.41618216" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="3" visible="true" weight="0.7162949" />
-      <window_info anchor="bottom" id="Services" order="4" weight="0.32977644" />
+      <window_info anchor="bottom" id="Problems View" order="2" weight="0.3302619" />
+      <window_info anchor="bottom" id="Terminal" order="3" weight="0.32994187" />
+      <window_info anchor="bottom" id="Services" order="4" weight="0.3302619" />
       <window_info anchor="bottom" id="Build" order="5" weight="0.3302619" />
-      <window_info anchor="bottom" id="Debug" order="6" weight="0.7162949" />
-      <window_info anchor="bottom" id="Run" order="7" weight="0.3302619" />
+      <window_info anchor="bottom" id="Debug" order="6" weight="0.3302619" />
+      <window_info active="true" anchor="bottom" id="Run" order="7" visible="true" weight="0.3302619" />
       <window_info anchor="bottom" id="TODO" order="8" weight="0.32977644" />
-      <window_info anchor="bottom" id="Find" order="9" weight="0.32897288" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.314438" />
+      <window_info anchor="bottom" id="Find" order="9" weight="0.32929194" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.22744909" />
       <window_info anchor="right" id="PR AI Assistant" />
       <window_info anchor="right" id="Notifications" order="0" weight="0.3298828" />
       <window_info anchor="right" id="AIAssistant" order="1" sideWeight="0.5007837" weight="0.5700313" />
@@ -131,7 +142,7 @@
       <window_info anchor="right" id="Gradle" order="3" weight="0.25" />
       <window_info anchor="right" id="Maven" order="4" weight="0.25" />
       <window_info anchor="right" id="Cargo" order="5" weight="0.2" />
-      <window_info anchor="right" id="RustCargo" order="6" sideWeight="0.5007837" weight="0.14199218" />
+      <window_info active="true" anchor="right" id="RustCargo" order="6" sideWeight="0.5007837" visible="true" weight="0.17841755" />
       <window_info anchor="right" id="Coverage" order="7" sideWeight="0.49921632" side_tool="true" weight="0.28652346" />
       <window_info anchor="right" id="documentation.v2" order="8" sideWeight="0.49915254" side_tool="true" weight="0.20285216" />
     </layout>
@@ -150,8 +161,9 @@
       <command value="cargo run --release" />
     </option>
   </component>
-  <component name="RunManager" selected="Cargo.run">
+  <component name="RunManager" selected="Cargo.Run hyperion-eosio-rust">
     <configuration name="Run hyperion-eosio-rust" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="buildProfileId" value="release" />
       <option name="command" value="run --package hyperion-eosio-rust --bin hyperion-eosio-rust" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
       <envs />
@@ -213,7 +225,10 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Cargo.Run hyperion-eosio-rust" />
+        <item itemvalue="Cargo.Run hyperion-eosio-rust" />
         <item itemvalue="Cargo.run" />
+        <item itemvalue="Cargo.Run hyperion-eosio-rust" />
         <item itemvalue="Cargo.Run hyperion-eosio-rust" />
       </list>
     </recent_temporary>
@@ -249,7 +264,10 @@
       <workItem from="1751626756958" duration="672000" />
       <workItem from="1751628720535" duration="2275000" />
       <workItem from="1751631242364" duration="83909000" />
-      <workItem from="1751911887742" duration="11933000" />
+      <workItem from="1751911887742" duration="42969000" />
+      <workItem from="1752065798794" duration="365000" />
+      <workItem from="1752066698475" duration="3873000" />
+      <workItem from="1752070381373" duration="1995000" />
     </task>
     <task id="LOCAL-00001" summary="elastic + ship + abi working">
       <option name="closed" value="true" />
@@ -307,7 +325,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751837137705</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="prepair action index">
+      <option name="closed" value="true" />
+      <created>1751986079176</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1751986079176</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -318,7 +344,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="AntelopeIO" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -340,9 +378,14 @@
           <option name="timeStamp" value="74" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/index/index_action.rs</url>
-          <line>147</line>
-          <option name="timeStamp" value="119" />
+          <url>file://$PROJECT_DIR$/../eosio-shipper/src/shipper_types.rs</url>
+          <line>324</line>
+          <option name="timeStamp" value="129" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/../eosio-shipper/src/shipper_types.rs</url>
+          <line>255</line>
+          <option name="timeStamp" value="149" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

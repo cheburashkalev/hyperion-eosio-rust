@@ -4,11 +4,15 @@ use crate::index::definitions::elastic_docs::{
 use crate::{configs, elastic_hyperion, measure_time};
 use elasticsearch::{IndexParts, SearchParts};
 use eosio_shipper_gf::EOSIO_SYSTEM;
-use eosio_shipper_gf::shipper_types::{AccountAuthSequence, AccountDelta, ActionReceiptVariant, ActionTraceVariant, BlockHeader, BlockPosition, PartialTransactionVariant, ProducerKey, ProducerSchedule, PrunableData, SignedBlock, Traces, Transaction, TransactionReceiptV0, TransactionTraceV0};
+use eosio_shipper_gf::shipper_types::{
+    AccountAuthSequence, AccountDelta, ActionReceiptVariant, ActionTraceVariant, BlockHeader,
+    BlockPosition, PartialTransactionVariant, ProducerKey, ProducerSchedule, PrunableData,
+    SignedBlock, Traces, Transaction, TransactionReceiptV0, TransactionTraceV0,
+};
 use futures_util::TryFutureExt;
-use libabieos_sys::ABIEOS;
 use log::{error, trace};
 use rayon::prelude::*;
+use rs_abieos::Abieos;
 use serde::Serialize;
 use serde_json::{Value, from_str, json};
 use std::fmt::format;
@@ -70,7 +74,7 @@ pub async fn parse_new_action(
                     let mut account_ram_deltas: Option<Vec<Value>> = None;
                     if account_ram_delta.is_some() {
                         let ard = account_ram_delta.unwrap();
-                        account_ram_deltas = Some(vec![json!(AccountDelta{
+                        account_ram_deltas = Some(vec![json!(AccountDelta {
                             account: ard.account.clone(),
                             delta: ard.delta.clone()
                         })]);
@@ -137,29 +141,43 @@ pub async fn parse_new_action(
                                 //println!("ABI: ...  {}  ...", abi);
                                 abi = parse_json(abi.as_str()).unwrap().to_string();
                                 //abi = abi.replace("\\\"","\"").replace("\\n","").replace("","");
-
-                                let shipper_abi = ABIEOS::new_with_abi(a.act.account.as_str(), abi.as_str()).unwrap_or_else(|e|{
-                                  panic!("Error create shipper abi: {:?}", e);
-                                });
+                                let shipper_abi = Abieos::new();
+                                shipper_abi
+                                    .set_abi_json(a.act.account.as_str(), abi)
+                                    .unwrap_or_else(|e| {
+                                        panic!("Error create shipper abi: {:?}", e);
+                                    });
                                 let hex = a.act.data.as_bytes();
                                 let hex = hex::decode(a.act.data.as_str()).unwrap();
-                                let hex = hex.as_slice();
-                                let data = shipper_abi
-                                    .bin_to_json(a.act.account.as_str(), a.act.name.as_str(), hex)
-                                    .unwrap_or_else(|e|{
-                                        shipper_abi.destroy();
-                                    panic!("Error parse data action: {:?}", e);
+                                let data = eosio_shipper_gf::shipper_types::bin_to_json(
+                                    &shipper_abi,
+                                    a.act.account.as_str(),
+                                    a.act.name.as_str(),
+                                    hex,
+                                )
+                                .unwrap_or_else(|e| {
+                                    shipper_abi.destroy();
+                                    a.act.data
                                 });
-                                shipper_abi.destroy();
-                                let data = parse_json(data.as_str()).unwrap();
-                                
-                                act = HyperionActionAct {
-                                    name: a.act.name.clone(),
-                                    account: a.act.account.clone(),
-                                    authorization: act_authorization,
-                                    data,
-                                };
+                                if shipper_abi.is_destroyed == true {
+                                    shipper_abi.destroy();
+                                    let j = parse_json(data.as_str()).unwrap();
 
+                                    act = HyperionActionAct {
+                                        name: a.act.name.clone(),
+                                        account: a.act.account.clone(),
+                                        authorization: act_authorization,
+                                        data: j,
+                                    };
+                                }
+                                else{
+                                    act = HyperionActionAct {
+                                        name: a.act.name.clone(),
+                                        account: a.act.account.clone(),
+                                        authorization: act_authorization,
+                                        data: Value::from(data),
+                                    };
+                                }
                                 let ref_receipt = a.receipt.as_ref();
                                 let clone_context_free = a.context_free.clone();
                                 creator_action_ordinal = a.creator_action_ordinal;
@@ -192,7 +210,7 @@ pub async fn parse_new_action(
                                     }
                                 }
                             }
-                            ActionTraceVariant::action_trace_v1(a) =>{
+                            ActionTraceVariant::action_trace_v1(a) => {
                                 let act_authorization = a.act.authorization.clone();
                                 let client = elastic_hyperion::get_elastic_client().await.unwrap();
                                 let response = client
@@ -227,18 +245,23 @@ pub async fn parse_new_action(
                                 //println!("ABI: ...  {}  ...", abi);
                                 abi = parse_json(abi.as_str()).unwrap().to_string();
                                 //abi = abi.replace("\\\"","\"").replace("\\n","").replace("","");
-
-                                let shipper_abi =
-                                    ABIEOS::new_with_abi(&*a.act.account.clone(), abi.as_str())
-                                        .unwrap();
-                                let hex = a.act.data.as_bytes();
-                                
+                                let shipper_abi = Abieos::new();
+                                shipper_abi
+                                    .set_abi_json(a.act.account.as_str(), abi)
+                                    .unwrap_or_else(|e| {
+                                        shipper_abi.destroy();
+                                        panic!("Error create shipper abi: {:?}", e);
+                                    });
                                 let data = shipper_abi
-                                    .hex_to_json(&*a.act.account.clone(), a.act.name.as_str(), hex)
+                                    .hex_to_json(
+                                        &*a.act.account.clone(),
+                                        a.act.name.as_str(),
+                                        a.act.data,
+                                    )
                                     .unwrap();
                                 shipper_abi.destroy();
                                 let data = parse_json(data.as_str()).unwrap().to_string();
-                                
+
                                 act = HyperionActionAct {
                                     name: a.act.name.clone(),
                                     account: a.act.account.clone(),
