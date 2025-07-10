@@ -32,6 +32,7 @@ fn parse_json(s: &str) -> Result<Value, serde_json::Error> {
     }
 }
 pub async fn parse_new_action(
+    shipper_abi: &Abieos,
     semaphore: Arc<Semaphore>,
     header: &BlockHeader,
     traces: Vec<Traces>,
@@ -141,13 +142,12 @@ pub async fn parse_new_action(
                                 //println!("ABI: ...  {}  ...", abi);
                                 abi = parse_json(abi.as_str()).unwrap().to_string();
                                 //abi = abi.replace("\\\"","\"").replace("\\n","").replace("","");
-                                let shipper_abi = Abieos::new();
-                                shipper_abi
+                                let abc =shipper_abi
                                     .set_abi_json(a.act.account.as_str(), abi)
                                     .unwrap_or_else(|e| {
                                         panic!("Error create shipper abi: {:?}", e);
                                     });
-                                let hex = a.act.data.as_bytes();
+
                                 let hex = hex::decode(a.act.data.as_str()).unwrap();
                                 let data = eosio_shipper_gf::shipper_types::bin_to_json(
                                     &shipper_abi,
@@ -156,11 +156,11 @@ pub async fn parse_new_action(
                                     hex,
                                 )
                                 .unwrap_or_else(|e| {
-                                    shipper_abi.destroy();
+
                                     a.act.data
                                 });
                                 if shipper_abi.is_destroyed == true {
-                                    shipper_abi.destroy();
+
                                     let j = parse_json(data.as_str()).unwrap();
 
                                     act = HyperionActionAct {
@@ -249,7 +249,7 @@ pub async fn parse_new_action(
                                 shipper_abi
                                     .set_abi_json(a.act.account.as_str(), abi)
                                     .unwrap_or_else(|e| {
-                                        shipper_abi.destroy();
+                                        //shipper_abi.destroy();
                                         panic!("Error create shipper abi: {:?}", e);
                                     });
                                 let data = shipper_abi
@@ -259,7 +259,7 @@ pub async fn parse_new_action(
                                         a.act.data,
                                     )
                                     .unwrap();
-                                shipper_abi.destroy();
+                                //shipper_abi.destroy();
                                 let data = parse_json(data.as_str()).unwrap().to_string();
 
                                 act = HyperionActionAct {
@@ -281,12 +281,12 @@ pub async fn parse_new_action(
                                         ActionReceiptVariant::action_receipt_v0(r) => {
                                             let mut auth_sequence: Vec<AccountAuthSequence> =
                                                 Vec::new();
-                                            for auth in &r.auth_sequence {
+                                            r.auth_sequence.iter().for_each(|auth| {
                                                 auth_sequence.push(AccountAuthSequence {
                                                     account: auth.account.clone(),
                                                     sequence: auth.sequence.clone(),
                                                 });
-                                            }
+                                            });
                                             act_digest = r.act_digest.clone();
                                             global_sequence = r.global_sequence.clone();
                                             let receiver = r.receiver.clone();

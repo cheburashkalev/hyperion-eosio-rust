@@ -1,19 +1,20 @@
 use elasticsearch::IndexParts;
 use eosio_shipper_gf::EOSIO_SYSTEM;
-use eosio_shipper_gf::shipper_types::{
-    Account, GetBlocksResultV0Ex, ShipResultsEx, SignedBlock, TableRowTypes,
-};
+use eosio_shipper_gf::shipper_types::{Account, BlockPosition, GetBlocksResultV0Ex, ShipResultsEx, SignedBlock, TableRowTypes};
 use futures_util::{SinkExt, StreamExt};
 use serde_json::{Value, json};
 use std::error::Error;
-use std::sync::Arc;
+use std::ptr::NonNull;
+use std::sync::{Arc, OnceLock};
 use std::thread;
 use std::time::Duration;
-use rs_abieos::Abieos;
+use crossbeam::queue::SegQueue;
+use rs_abieos::{abieos_context, abieos_context_s, Abieos};
 use tokio::io;
 use tokio::io::AsyncWriteExt;
-use tokio::sync::{mpsc, Semaphore};
-use tokio::time::Instant;
+use tokio::sync::{mpsc, Mutex, Semaphore};
+use tokio::sync::mpsc::UnboundedSender;
+use tokio::time::{sleep, Instant};
 use tokio_tungstenite::connect_async;
 use tokio_tungstenite::tungstenite::{Bytes, Message, Utf8Bytes};
 pub mod definitions;
@@ -56,139 +57,51 @@ pub async fn start_index_block_result_v0(start_block: u32) -> Result<(), Box<dyn
     //let mut shipper_abi: ABIEOS = ABIEOS::new();
     println!("Start listening SHIP messages");
     let mut msg_texts: Utf8Bytes = Utf8Bytes::default();
-    let semaphore = Arc::new(Semaphore::new(100));
+    let semaphore = Arc::new(Semaphore::new(300));
     let mut durations = Vec::with_capacity(10000);
-
-
+    let durations_queue = SegQueue::new();
+    let abi_config: &String = configs::abi::get_abi_config();
+    let shipper_abi = Abieos::new();
+    shipper_abi.set_abi_json("0", abi_config.clone()).unwrap_or_else(|e|{
+        shipper_abi.destroy();
+        panic!("Error create shipper abi: {:?}", e);
+    });
     while let Some(message) = read.next().await {
         match message {
             Ok(Message::Text(text)) => {
                 msg_texts = text;
                 //println!("NEW SHIPPER_ABI has been received \n {:?}",msg_texts);
-
+                shipper_abi.set_abi_json(EOSIO_SYSTEM, (&msg_texts).to_string()).unwrap_or_else(|e|{
+                    shipper_abi.destroy();
+                    panic!("Error create shipper abi: {:?}", e);
+                });
                 let status_request = GetStatusRequestV0::new();
                 let request_bytes = status_request.marshal_binary()?;
                 tx.send(request_bytes)?;
             }
-            Ok(Message::Binary(data)) => {
+            Ok(Message::Binary(data)) =>  unsafe {
                 let start = Instant::now();
-                let shipper_abi = Abieos::new();
-                shipper_abi.set_abi_json(EOSIO_SYSTEM, msg_texts.to_string()).unwrap_or_else(|e|{
-                    shipper_abi.destroy();
-                    panic!("Error create shipper abi: {:?}", e);
+
+                //parse_ship(r, &shipper_abi, &data, &semaphore, durations_queue, next_block, &tx).await;
+                tokio::spawn({
+                    semaphore.clone().acquire().await;
+                    parse_ship(
+                    (&msg_texts).to_string(),
+                    data.to_vec(),
+                    semaphore.clone(),
+                    next_block,
+                    tx.clone())
                 });
-                //tokio::spawn(async{
-                let r = ShipResultsEx::from_bin(&shipper_abi, &data);
-                shipper_abi.destroy();
-                match r {
-                    Ok(msg) => {
-                        match msg {
-                            ShipResultsEx::BlockResult(BlockResult) => {
+                continue;
 
-                                let this_block = &BlockResult.this_block.unwrap();
-
-                                let block = &BlockResult.block.unwrap();
-
-                                let block_ts: &String = match block {
-                                    SignedBlock::signed_block_v0(_block) => {
-                                        &_block.signed_header.header.timestamp
-                                    }
-                                    SignedBlock::signed_block_v1(_block) => {
-                                        &_block.signed_header.header.timestamp
-                                    }
-                                };
-                                index_block::parse_new_block(semaphore.clone(),block, block_ts, this_block).await;
-                                let head_block = BlockResult.head;
-                                let head_block_num = head_block.block_num;
-                                if durations.len() == 10000 {
-                                    draw_progress_bar(this_block.block_num, head_block_num,durations.clone()).await;
-                                }
-                                //println!("BlockResult received - Head: {}, This Block: {}, Transactions: {}, Traces: {}, Deltas: {}", head_block_num, this_block.block_num, BlockResult.transactions.len(), BlockResult.traces.len(), BlockResult.deltas.len());
-                                for delta in BlockResult.deltas {
-                                    if delta.name == "account" {
-                                        for row in delta.rows {
-                                            match row.data {
-                                                TableRowTypes::account(acc) => match acc {
-                                                    Account::account_v0(acc) => {
-                                                        index_abi::parse_new_abi(
-                                                            semaphore.clone(),
-                                                            acc,
-                                                            block_ts.to_string(),
-                                                            this_block.block_num,
-                                                        )
-                                                        .await;
-                                                    }
-                                                },
-                                                _ => todo!(),
-                                            }
-                                        }
-                                    }
-                                }
-                                if BlockResult.transactions.len() > 0 {
-                                    let header = match block{
-                                        SignedBlock::signed_block_v0(b)=>{
-                                            &b.signed_header.header
-                                        },
-                                        SignedBlock::signed_block_v1(b)=>{
-                                            &b.signed_header.header
-                                        }
-                                    };
-                                    index_action::parse_new_action(semaphore.clone(),header,BlockResult.traces,block_ts,this_block).await;
-                                    //println!("Transactions received");
-                                }
-                                if this_block.block_num % 10000 == 0 {
-                                    next_block = this_block.block_num + 1;
-
-                                    let req = GetBlocksRequestV0 {
-                                        start_block_num: next_block,
-                                        end_block_num: head_block_num,
-                                        max_messages_in_flight: 10000,
-                                        have_positions: vec![],
-                                        irreversible_only: false,
-                                        fetch_block: true,
-                                        fetch_traces: true,
-                                        fetch_deltas: true,
-                                    };
-
-                                    if let Ok(req_bytes) = req.marshal_binary() {
-                                        tx.send(req_bytes).unwrap();
-                                    }
-                                }
-                            }
-                            // Get new Status from NodeOS EOSIO
-                            ShipResultsEx::Status(status) => {
-                                println!(
-                                    "Status received - Head: {}, Last irreversible: {}",
-                                    status.head.block_num, status.last_irreversible.block_num
-                                );
-                                // Request first 10000 blocks
-                                let req = GetBlocksRequestV0 {
-                                    start_block_num: next_block,
-                                    end_block_num: status.head.block_num,
-                                    max_messages_in_flight: 10000,
-                                    have_positions: vec![],
-                                    irreversible_only: false,
-                                    fetch_block: true,
-                                    fetch_traces: true,
-                                    fetch_deltas: true,
-                                };
-
-                                if let Ok(req_bytes) = req.marshal_binary() {
-                                    tx.send(req_bytes).unwrap();
-                                }
-                            }
-                        }
-                    }
-                    Err(e) => {
-                        panic!("ERROR: {:?}",e);
-                    } ,
-                }
                 durations.push(start.elapsed());
+                durations_queue.push(start.elapsed());
+                if(durations_queue.len() >= 10000) {
+                    durations_queue.pop();
+                }
                 if durations.len() > 10000 {
                     durations.remove(0);
                 }
-                //});
-
                 continue;
             }
             Ok(Message::Ping(_)) => println!("Ping received"),
@@ -206,9 +119,139 @@ pub async fn start_index_block_result_v0(start_block: u32) -> Result<(), Box<dyn
     }
     Ok(())
 }
-pub fn index_block_result_v0(block_res: GetBlocksResultV0Ex) {}
-use std::time::Duration as StdDuration;
-async fn draw_progress_bar(current: u32, max: u32, durations: Vec<Duration>) {
+async fn parse_ship(msg_texts: String, data: Vec<u8>, semaphore: Arc<Semaphore>, start_block: u32, tx: UnboundedSender<Vec<u8>>) {
+    let abi_config: &String = configs::abi::get_abi_config();
+    let shipper_abi = Abieos::new();
+    shipper_abi.set_abi_json("0", abi_config.clone()).unwrap_or_else(|e|{
+        shipper_abi.destroy();
+        panic!("Error create shipper abi: {:?}", e);
+    });
+    shipper_abi.set_abi_json(EOSIO_SYSTEM, (&msg_texts).to_string()).unwrap_or_else(|e|{
+        shipper_abi.destroy();
+        panic!("Error create shipper abi: {:?}", e);
+    });
+    let r = ShipResultsEx::from_bin(&shipper_abi, &data);
+    match r {
+        Ok(msg) => {
+            match msg {
+                ShipResultsEx::BlockResult(BlockResult) => {
+                    let head_block = BlockResult.head;
+                    let head_block_num = head_block.block_num;
+                    let op_this_block = BlockResult.this_block;
+                    if op_this_block.is_none(){
+                        sleep(Duration::from_secs(2)).await;
+                        let req = GetBlocksRequestV0 {
+                            start_block_num: head_block_num - 5,
+                            end_block_num: head_block_num,
+                            max_messages_in_flight: 6,
+                            have_positions: vec![],
+                            irreversible_only: false,
+                            fetch_block: true,
+                            fetch_traces: true,
+                            fetch_deltas: true,
+                        };
+                        
+                        if let Ok(req_bytes) = req.marshal_binary() {
+                            tx.send(req_bytes).unwrap();
+                        }
+                        return;
+                    }
+                    let this_block = &op_this_block.unwrap();
+                    let block = &BlockResult.block.unwrap();
+
+                    let block_ts: &String = match block {
+                        SignedBlock::signed_block_v0(_block) => {
+                            &_block.signed_header.header.timestamp
+                        }
+                        SignedBlock::signed_block_v1(_block) => {
+                            &_block.signed_header.header.timestamp
+                        }
+                    };
+                    index_block::parse_new_block(&semaphore,block, block_ts, this_block,&BlockResult.prev_block).await;
+
+
+                    draw_progress_bar(this_block.block_num, head_block_num).await;
+                    //println!("BlockResult received - Head: {}, This Block: {}, Transactions: {}, Traces: {}, Deltas: {}", head_block_num, this_block.block_num, BlockResult.transactions.len(), BlockResult.traces.len(), BlockResult.deltas.len());
+                    for delta in BlockResult.deltas {
+                        if delta.name == "account" {
+                            for row in delta.rows {
+                                match row.data {
+                                    TableRowTypes::account(acc) => match acc {
+                                        Account::account_v0(acc) => {
+                                            index_abi::parse_new_abi(&shipper_abi,
+                                                                     semaphore.clone(),
+                                                                     acc,
+                                                                     block_ts.to_string(),
+                                                                     this_block.block_num,
+                                            ).await;
+                                        }
+                                    },
+                                    _ => todo!(),
+                                }
+                            }
+                        }
+                    }
+                    if BlockResult.transactions.len() > 0 {
+                        let header = match block{
+                            SignedBlock::signed_block_v0(b)=>{
+                                &b.signed_header.header
+                            },
+                            SignedBlock::signed_block_v1(b)=>{
+                                &b.signed_header.header
+                            }
+                        };
+                        index_action::parse_new_action(&shipper_abi, semaphore.clone(),header,BlockResult.traces,block_ts,this_block).await;
+                        //println!("Transactions received");
+                    }
+                    if this_block.block_num % 10000 == 0 {
+                        let req = GetBlocksRequestV0 {
+                            start_block_num: this_block.block_num + 1,
+                            end_block_num: head_block_num,
+                            max_messages_in_flight: 10000,
+                            have_positions: vec![],
+                            irreversible_only: false,
+                            fetch_block: true,
+                            fetch_traces: true,
+                            fetch_deltas: true,
+                        };
+
+                        if let Ok(req_bytes) = req.marshal_binary() {
+                            tx.send(req_bytes).unwrap();
+                        }
+                    }
+                }
+                // Get new Status from NodeOS EOSIO
+                ShipResultsEx::Status(status) => {
+                    println!(
+                        "Status received - Head: {}, Last irreversible: {}",
+                        status.head.block_num, status.last_irreversible.block_num
+                    );
+                    // Request first 10000 blocks
+                    let req = GetBlocksRequestV0 {
+                        start_block_num: start_block,
+                        end_block_num: status.head.block_num,
+                        max_messages_in_flight: 10000,
+                        have_positions: vec![],
+                        irreversible_only: false,
+                        fetch_block: true,
+                        fetch_traces: true,
+                        fetch_deltas: true,
+                    };
+
+                    if let Ok(req_bytes) = req.marshal_binary() {
+                        tx.send(req_bytes).unwrap();
+                    }
+                }
+            }
+        }
+        Err(e) => {
+            panic!("ERROR: {:?}",e);
+        } ,
+    }
+    shipper_abi.destroy();
+    drop(shipper_abi);
+}
+async fn draw_progress_bar(current: u32, max: u32) {
     // Получаем информацию о текущем runtime
     let handle = tokio::runtime::Handle::current();
     let alive_tasks = handle.metrics().num_alive_tasks(); // Количество рабочих потоков
@@ -229,14 +272,22 @@ async fn draw_progress_bar(current: u32, max: u32, durations: Vec<Duration>) {
     // Создаём строку прогресс-бара
 
     let bar = "=".repeat(filled) + &" ".repeat(bar_width - filled);
-    let total: Duration  = durations.iter().sum();
-    let dur_avg = total / 10000;
-    let dir_min = durations.iter().min().unwrap();
-    let dur_max = durations.iter().max().unwrap();
+    //let all_dur = durations_queue.into_iter().collect::<Vec<Duration>>();
+    //let total: Duration  = all_dur.iter().sum();
+    //let dur_avg = total / 10000;
+//
+    //let dir_min = all_dur.iter().min().unwrap();
+    //let dur_max = all_dur.iter().max().unwrap();
+    //dur_avg.as_millis()
+    // Конвертируем микросекунды в секунды (1 µs = 1e-6 секунды)
+    //let seconds_per_operation = dur_avg.as_secs_f64() / 1_000_000.0;
+
+    // Вычисляем количество операций в секунду (1 / время одной операции)
+    //let operations_per_second = 1.0 / dur_avg.as_secs_f64();
     // Выводим прогресс-бар с информацией о потоках
     print!(
-        "\r[{}] {:.1}% ({}/{}) | Alive Tasks: {} | Num Workers: {} | total: {:?} | agv: {:?} | min: {:?} | max: {:?}",
-        bar, percent, current, max, alive_tasks,num_workers,total,dur_avg,dir_min,dur_max
+        "\r[{}] {:.1}% ({}/{}) | Alive Tasks: {} | Num Workers: {} | total: {:?} | agv: {:?} | min: {:?} | max: {:?} | BPS: {} |",
+        bar, percent, current, max, alive_tasks,num_workers,0,0,0,0,0//operations_per_second as u32
     );
     io::stdout().flush().await.expect("Failed to flush stdout");
 }

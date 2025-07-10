@@ -11,18 +11,13 @@ use std::time::Instant;
 use rs_abieos::Abieos;
 use tokio::sync::Semaphore;
 
-pub async fn parse_new_abi(semaphore:Arc<Semaphore>, acc: AccountV0, block_ts: String, block_num: u32) {
+pub async fn parse_new_abi(abi_abieos: &Abieos,semaphore:Arc<Semaphore>, acc: AccountV0, block_ts: String, block_num: u32) {
     if acc.abi != "" {
-        let abi_config: &String = configs::abi::get_abi_config();
-        let abi_abieos = Abieos::new();
-        abi_abieos.set_abi_json("eosio", abi_config.clone()).unwrap_or_else(|e|{
-            abi_abieos.destroy();
-            panic!("Error create shipper abi: {:?}", e);
-        });
+
         let parsed_abi = abi_abieos
-            .hex_to_json("eosio", "abi_def", acc.abi.clone())
+            .hex_to_json("0", "abi_def", acc.abi.clone())
             .unwrap();
-        abi_abieos.destroy();
+        //abi_abieos.destroy();
         start_async(semaphore,acc, block_ts, block_num, parsed_abi);
     }
 }

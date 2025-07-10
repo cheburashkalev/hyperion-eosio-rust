@@ -24,6 +24,8 @@ pub struct BlockDocument {
     pub schedule_version: u32,
     pub cpu_usage: u32,
     pub net_usage: u32,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prev_id: Option<String>,
 }
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ActionReceipt {
