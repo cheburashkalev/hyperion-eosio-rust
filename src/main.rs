@@ -21,7 +21,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     command.print_help()?;
     let matches = command.get_matches();
     let start_block: u32 = *matches.get_one::<u32>("start_block")
-        .unwrap_or(&77870000);
+        .unwrap_or(&1);
     index::start_index_block_result_v0(start_block).await;
     Ok(())
 }

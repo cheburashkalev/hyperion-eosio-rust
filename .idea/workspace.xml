@@ -26,13 +26,9 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3e97b905-9a3d-41d2-af77-b39881101931" name="Changes" comment="action work fine">
+    <list default="true" id="3e97b905-9a3d-41d2-af77-b39881101931" name="Changes" comment="Faster then fast">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index/definitions/elastic_docs.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/definitions/elastic_docs.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index/index_abi.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/index_abi.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index/index_action.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/index_action.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/configs/templates.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/configs/templates.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index/index_block.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/index_block.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
@@ -42,7 +38,7 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="RsBuildProfile:dev" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="RsBuildProfile:release" />
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -87,7 +83,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Cargo.Run axum-api.executor": "Run",
-    "Cargo.Run hyperion-eosio-rust.executor": "Debug",
+    "Cargo.Run hyperion-eosio-rust.executor": "Run",
     "Cargo.Test hyperion-eosio-rust.executor": "Debug",
     "Cargo.run.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
@@ -120,19 +116,19 @@
       <window_info id="Commit_Guest" show_stripe_button="false" />
       <window_info id="Pull Requests" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.122851565" />
-      <window_info id="Commit" order="1" weight="0.123188406" />
+      <window_info id="Commit" order="1" weight="0.122851565" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Database Changes" />
       <window_info anchor="bottom" id="TypeScript" />
       <window_info anchor="bottom" id="File Transfer" />
       <window_info anchor="bottom" id="Version Control" order="0" weight="0.25557712" />
       <window_info anchor="bottom" id="Problems" order="1" />
-      <window_info anchor="bottom" id="Problems View" order="2" weight="0.32994187" />
-      <window_info anchor="bottom" id="Terminal" order="3" weight="0.32994187" />
+      <window_info anchor="bottom" id="Problems View" order="2" weight="0.44040698" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="3" visible="true" weight="0.20494185" />
       <window_info anchor="bottom" id="Services" order="4" weight="0.3302619" />
-      <window_info active="true" anchor="bottom" id="Build" order="5" visible="true" weight="0.44040698" />
+      <window_info anchor="bottom" id="Build" order="5" weight="0.44040698" />
       <window_info anchor="bottom" id="Debug" order="6" weight="0.44040698" />
-      <window_info anchor="bottom" id="Run" order="7" weight="0.44040698" />
+      <window_info anchor="bottom" id="Run" order="7" weight="0.16812016" />
       <window_info anchor="bottom" id="TODO" order="8" weight="0.32977644" />
       <window_info anchor="bottom" id="Find" order="9" weight="0.32929194" />
       <window_info anchor="bottom" id="Messages" order="10" weight="0.22744909" />
@@ -164,7 +160,7 @@
   </component>
   <component name="RunManager" selected="Cargo.Run hyperion-eosio-rust">
     <configuration name="Run hyperion-eosio-rust" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="buildProfileId" value="dev" />
+      <option name="buildProfileId" value="release" />
       <option name="command" value="run --package hyperion-eosio-rust --bin hyperion-eosio-rust" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
       <envs />
@@ -325,7 +321,7 @@
       <workItem from="1752065798794" duration="365000" />
       <workItem from="1752066698475" duration="3873000" />
       <workItem from="1752070381373" duration="8300000" />
-      <workItem from="1752131197363" duration="27261000" />
+      <workItem from="1752131197363" duration="37687000" />
     </task>
     <task id="LOCAL-00001" summary="elastic + ship + abi working">
       <option name="closed" value="true" />
@@ -407,7 +403,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752072809611</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Faster then fast">
+      <option name="closed" value="true" />
+      <created>1752171252733</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1752171252733</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -442,7 +446,8 @@
     <MESSAGE value="speed up!" />
     <MESSAGE value="prepair action index" />
     <MESSAGE value="action work fine" />
-    <option name="LAST_COMMIT_MESSAGE" value="action work fine" />
+    <MESSAGE value="Faster then fast" />
+    <option name="LAST_COMMIT_MESSAGE" value="Faster then fast" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -3,7 +3,7 @@ use serde_json::{Value, json};
 use std::collections::HashMap;
 use serde::{Deserialize, Deserializer};
 
-const shards: u32 = 2;
+const shards: u32 = 1;
 const refresh: &str = "1s";
 const compression: &str = "best_compression";
 fn replicas() -> u32 {
@@ -46,7 +46,7 @@ fn actionSettings() -> Value {
         "index": {
             "codec": compression,
             "refresh_interval": refresh,
-            "number_of_shards": shards * 2,
+            "number_of_shards": shards * 1,
             "number_of_replicas": replicas(),
             "sort": {
                 "field": "global_sequence",

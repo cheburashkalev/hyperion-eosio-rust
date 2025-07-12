@@ -83,15 +83,21 @@ pub async fn start_index_block_result_v0(start_block: u32) -> Result<(), Box<dyn
                 let start = Instant::now();
 
                 //parse_ship(r, &shipper_abi, &data, &semaphore, durations_queue, next_block, &tx).await;
-                tokio::spawn({
-                    semaphore.clone().acquire().await;
-                    parse_ship(
-                    (&msg_texts).to_string(),
-                    data.to_vec(),
-                    semaphore.clone(),
-                    next_block,
-                    tx.clone())
-                });
+                parse_ship(
+                    &shipper_abi,
+                    &data,
+                    &semaphore,
+                    &next_block,
+                    &tx).await;
+                //tokio::spawn({
+                //    semaphore.clone().acquire().await;
+                //    parse_ship(
+                //    (&msg_texts).to_string(),
+                //    data.to_vec(),
+                //    semaphore.clone(),
+                //    &next_block,
+                //    &tx)
+                //});
                 continue;
 
                 durations.push(start.elapsed());
@@ -119,18 +125,8 @@ pub async fn start_index_block_result_v0(start_block: u32) -> Result<(), Box<dyn
     }
     Ok(())
 }
-async fn parse_ship(msg_texts: String, data: Vec<u8>, semaphore: Arc<Semaphore>, start_block: u32, tx: UnboundedSender<Vec<u8>>) {
-    let abi_config: &String = configs::abi::get_abi_config();
-    let shipper_abi = Abieos::new();
-    shipper_abi.set_abi_json("0", abi_config.clone()).unwrap_or_else(|e|{
-        shipper_abi.destroy();
-        panic!("Error create shipper abi: {:?}", e);
-    });
-    shipper_abi.set_abi_json(EOSIO_SYSTEM, (&msg_texts).to_string()).unwrap_or_else(|e|{
-        shipper_abi.destroy();
-        panic!("Error create shipper abi: {:?}", e);
-    });
-    let r = ShipResultsEx::from_bin(&shipper_abi, &data);
+async fn parse_ship(shipper_abi: &Abieos, data: &[u8], semaphore: &Arc<Semaphore>, start_block: &u32, tx: &UnboundedSender<Vec<u8>>) {
+    let r = ShipResultsEx::from_bin(shipper_abi, data);
     match r {
         Ok(msg) => {
             match msg {
@@ -150,7 +146,7 @@ async fn parse_ship(msg_texts: String, data: Vec<u8>, semaphore: Arc<Semaphore>,
                             fetch_traces: true,
                             fetch_deltas: true,
                         };
-                        
+
                         if let Ok(req_bytes) = req.marshal_binary() {
                             tx.send(req_bytes).unwrap();
                         }
@@ -167,7 +163,7 @@ async fn parse_ship(msg_texts: String, data: Vec<u8>, semaphore: Arc<Semaphore>,
                             &_block.signed_header.header.timestamp
                         }
                     };
-                    index_block::parse_new_block(&semaphore,block, block_ts, this_block,&BlockResult.prev_block).await;
+                    index_block::parse_new_block(block, block_ts, this_block,&BlockResult.prev_block).await;
 
 
                     draw_progress_bar(this_block.block_num, head_block_num).await;
@@ -178,7 +174,7 @@ async fn parse_ship(msg_texts: String, data: Vec<u8>, semaphore: Arc<Semaphore>,
                                 match row.data {
                                     TableRowTypes::account(acc) => match acc {
                                         Account::account_v0(acc) => {
-                                            index_abi::parse_new_abi(&shipper_abi,
+                                            index_abi::parse_new_abi(shipper_abi,
                                                                      semaphore.clone(),
                                                                      acc,
                                                                      block_ts.to_string(),
@@ -200,7 +196,7 @@ async fn parse_ship(msg_texts: String, data: Vec<u8>, semaphore: Arc<Semaphore>,
                                 &b.signed_header.header
                             }
                         };
-                        index_action::parse_new_action(&shipper_abi, semaphore.clone(),header,BlockResult.traces,block_ts,this_block).await;
+                        index_action::parse_new_action(shipper_abi, semaphore.clone(),header,BlockResult.traces,block_ts,this_block).await;
                         //println!("Transactions received");
                     }
                     if this_block.block_num % 10000 == 0 {
@@ -228,7 +224,7 @@ async fn parse_ship(msg_texts: String, data: Vec<u8>, semaphore: Arc<Semaphore>,
                     );
                     // Request first 10000 blocks
                     let req = GetBlocksRequestV0 {
-                        start_block_num: start_block,
+                        start_block_num: *start_block,
                         end_block_num: status.head.block_num,
                         max_messages_in_flight: 10000,
                         have_positions: vec![],
@@ -248,8 +244,6 @@ async fn parse_ship(msg_texts: String, data: Vec<u8>, semaphore: Arc<Semaphore>,
             panic!("ERROR: {:?}",e);
         } ,
     }
-    shipper_abi.destroy();
-    drop(shipper_abi);
 }
 async fn draw_progress_bar(current: u32, max: u32) {
     // Получаем информацию о текущем runtime
