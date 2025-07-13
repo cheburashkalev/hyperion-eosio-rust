@@ -3,6 +3,8 @@ mod index;
 mod configs;
 mod elastic_hyperion;
 use clap::{Command, Arg, ArgAction};
+use futures_util::future::join_all;
+
 #[tokio::main(flavor = "multi_thread", worker_threads = 32)]
 async fn main() -> Result<(), Box<dyn Error>> {
     let mut command = Command::new("HYPERION-EOSIO-RUST")
@@ -22,7 +24,13 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let matches = command.get_matches();
     let start_block: u32 = *matches.get_one::<u32>("start_block")
         .unwrap_or(&1);
-    index::start_index_block_result_v0(start_block).await;
+    let num_treads = configs::ship::get_ship_con_config().num_threads.unwrap_or(1);
+    let mut indexers = Vec::new();
+    for i in 1..= num_treads {
+        indexers.push(index::start_index_block_result_v0(&start_block));
+    }
+    join_all(indexers).await;
+
     Ok(())
 }
 #[macro_export]

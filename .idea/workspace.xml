@@ -26,9 +26,14 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3e97b905-9a3d-41d2-af77-b39881101931" name="Changes" comment="Faster then fast">
+    <list default="true" id="3e97b905-9a3d-41d2-af77-b39881101931" name="Changes" comment="Wrong parsing">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/configs/templates.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/configs/templates.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/configs/ship_con.json" beforeDir="false" afterPath="$PROJECT_DIR$/configs/ship_con.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/configs/ship.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/configs/ship.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index/index_abi.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/index_abi.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index/index_action.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/index_action.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index/index_block.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/index_block.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/index/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
@@ -123,13 +128,13 @@
       <window_info anchor="bottom" id="File Transfer" />
       <window_info anchor="bottom" id="Version Control" order="0" weight="0.25557712" />
       <window_info anchor="bottom" id="Problems" order="1" />
-      <window_info anchor="bottom" id="Problems View" order="2" weight="0.44040698" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="3" visible="true" weight="0.20494185" />
-      <window_info anchor="bottom" id="Services" order="4" weight="0.3302619" />
-      <window_info anchor="bottom" id="Build" order="5" weight="0.44040698" />
-      <window_info anchor="bottom" id="Debug" order="6" weight="0.44040698" />
-      <window_info anchor="bottom" id="Run" order="7" weight="0.16812016" />
-      <window_info anchor="bottom" id="TODO" order="8" weight="0.32977644" />
+      <window_info anchor="bottom" id="Problems View" order="2" weight="0.3396318" />
+      <window_info anchor="bottom" id="Terminal" order="3" weight="0.3396318" />
+      <window_info anchor="bottom" id="Services" order="4" weight="0.25339147" />
+      <window_info anchor="bottom" id="Build" order="5" weight="0.3396318" />
+      <window_info anchor="bottom" id="Debug" order="6" weight="0.3396318" />
+      <window_info active="true" anchor="bottom" id="Run" order="7" visible="true" weight="0.3396318" />
+      <window_info anchor="bottom" id="TODO" order="8" weight="0.25339147" />
       <window_info anchor="bottom" id="Find" order="9" weight="0.32929194" />
       <window_info anchor="bottom" id="Messages" order="10" weight="0.22744909" />
       <window_info anchor="right" id="PR AI Assistant" />
@@ -321,7 +326,9 @@
       <workItem from="1752065798794" duration="365000" />
       <workItem from="1752066698475" duration="3873000" />
       <workItem from="1752070381373" duration="8300000" />
-      <workItem from="1752131197363" duration="37687000" />
+      <workItem from="1752131197363" duration="42925000" />
+      <workItem from="1752337267773" duration="200000" />
+      <workItem from="1752337465178" duration="22558000" />
     </task>
     <task id="LOCAL-00001" summary="elastic + ship + abi working">
       <option name="closed" value="true" />
@@ -411,7 +418,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752171252733</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Wrong parsing">
+      <option name="closed" value="true" />
+      <created>1752330675650</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1752330675650</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -447,7 +462,8 @@
     <MESSAGE value="prepair action index" />
     <MESSAGE value="action work fine" />
     <MESSAGE value="Faster then fast" />
-    <option name="LAST_COMMIT_MESSAGE" value="Faster then fast" />
+    <MESSAGE value="Wrong parsing" />
+    <option name="LAST_COMMIT_MESSAGE" value="Wrong parsing" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -455,22 +471,10 @@
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/../.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/reqwest-0.12.20/src/tls.rs</url>
           <line>395</line>
+          <properties>
+            <option name="hitCountValue" value="1" />
+          </properties>
           <option name="timeStamp" value="74" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/../eosio-shipper/src/shipper_types.rs</url>
-          <line>255</line>
-          <option name="timeStamp" value="149" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/index/index_abi.rs</url>
-          <line>16</line>
-          <option name="timeStamp" value="150" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/index/index_abi.rs</url>
-          <line>20</line>
-          <option name="timeStamp" value="151" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

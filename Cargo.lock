@@ -694,7 +694,9 @@ dependencies = [
 
 [[package]]
 name = "eosio-shipper-gf"
-version = "0.1.4"
+version = "0.1.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d1c6cd9bf3d5bb98839836679b322a79e71f50c10c190416b2a5d3ba4a992a16"
 dependencies = [
  "base64-serde",
  "cc",
@@ -709,7 +711,7 @@ dependencies = [
  "log",
  "openssl",
  "openssl-sys",
- "rs_abieos",
+ "rs_abieos_gf",
  "rust-embed",
  "serde",
  "serde_json",
@@ -802,12 +804,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "futures"
+version = "0.3.31"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "65bc07b1a8bc7c85c5f2e110c476c7389b4554ba72af57d8445ea63a576b0876"
+dependencies = [
+ "futures-channel",
+ "futures-core",
+ "futures-executor",
+ "futures-io",
+ "futures-sink",
+ "futures-task",
+ "futures-util",
+]
+
+[[package]]
 name = "futures-channel"
 version = "0.3.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2dff15bf788c671c1934e366d07e30c1814a8ef514e1af724a602e8a2fbe1b10"
 dependencies = [
  "futures-core",
+ "futures-sink",
 ]
 
 [[package]]
@@ -815,6 +833,17 @@ name = "futures-core"
 version = "0.3.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "05f29059c0c2090612e8d742178b0580d2dc940c837851ad723096f87af6663e"
+
+[[package]]
+name = "futures-executor"
+version = "0.3.31"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1e28d1d997f585e54aebc3f97d39e72338912123a67330d723fdbb564d646c9f"
+dependencies = [
+ "futures-core",
+ "futures-task",
+ "futures-util",
+]
 
 [[package]]
 name = "futures-io"
@@ -851,6 +880,7 @@ version = "0.3.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9fa08315bb612088cc391249efdc3bc77536f16c91f6cf495e6fbe85b20a4a81"
 dependencies = [
+ "futures-channel",
  "futures-core",
  "futures-io",
  "futures-macro",
@@ -1219,12 +1249,13 @@ dependencies = [
  "elasticsearch",
  "eosio-shipper-gf",
  "error-chain",
+ "futures",
  "futures-util",
  "hex",
  "log",
  "rayon",
  "reqwest 0.12.20",
- "rs_abieos",
+ "rs_abieos_gf",
  "serde",
  "serde_json",
  "serde_stacker",
@@ -2150,8 +2181,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "rs_abieos"
-version = "0.1.5"
+name = "rs_abieos_gf"
+version = "0.1.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9eb066a2ce3b0dd12385f163d319e1c4a4fb4c8506c3abe0d05065376d4d46e8"
 dependencies = [
  "bindgen",
  "cc",

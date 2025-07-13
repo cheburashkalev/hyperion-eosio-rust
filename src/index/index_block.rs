@@ -16,7 +16,7 @@ use std::thread;
 use std::time::Instant;
 use tokio::sync::Semaphore;
 
-pub async fn parse_new_block(
+pub fn parse_new_block(
     block: &SignedBlock,
     block_ts: &String,
     this_block: &BlockPosition,
@@ -97,7 +97,7 @@ fn start_async(
     //let new_producers = <ProducerSchedule as Clone>::clone(&header.new_producers.clone().unwrap());
     let mut prev_id = None;
     if prev_block.is_some() {
-        prev_id = Some(prev_block.as_ref().unwrap().block_id.clone().to_lowercase());
+        prev_id = Some(prev_block.as_ref().unwrap().block_id.to_lowercase());
     }
 
     tokio::spawn(async move {

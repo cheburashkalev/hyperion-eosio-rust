@@ -4,12 +4,15 @@ use crate::configs;
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct ShipConConfig {
-    pub url: String
+    pub url: String,
+    pub num_threads: Option<u16>
+
 }
 impl Default for ShipConConfig {
     fn default() -> Self {
         ShipConConfig {
-            url: "ws://116.202.173.189:17777".to_string()
+            url: "ws://116.202.173.189:17777".to_string(),
+            num_threads: None
         }
     }
 }
